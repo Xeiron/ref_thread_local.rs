@@ -51,3 +51,8 @@ fn main() {
     println!("The number is {}.", x);
 }
 ```
+
+## License
+
+Licensed under of
+ * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
