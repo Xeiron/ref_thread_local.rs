@@ -8,10 +8,10 @@ like using a `RefCell`.
 
 You may also initialize or destroy a `static` variable at any time you like.
 
-[![Travis-CI Status](https://travis-ci.org/xeiron/ref_thread_local.rs.svg?branch=master)](https://travis-ci.org/xeiron/ref_thread_local.rs)
+[![Travis-CI Status](https://travis-ci.org/Xeiron/ref_thread_local.rs.svg?branch=master)](https://travis-ci.org/Xeiron/ref_thread_local.rs)
 [![Latest version](https://img.shields.io/crates/v/ref_thread_local.svg)](https://crates.io/crates/ref_thread_local.rs)
 [![Documentation](https://docs.rs/ref_thread_local/badge.svg)](https://docs.rs/ref_thread_local)
-[![License](https://img.shields.io/crates/l/ref_thread_local.svg)](https://github.com/xeiron/ref_thread_local.rs#license)
+[![License](https://img.shields.io/crates/l/ref_thread_local.svg)](https://github.com/Xeiron/ref_thread_local.rs#license)
 
 ## Minimum supported `rustc`
 

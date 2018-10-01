@@ -14,10 +14,10 @@ keywords = ["macro", "lazy", "thread", "thread_local", "static", "refcell"]
 categories = [ "rust-patterns", "memory-management" ]
 
 [badges]
-appveyor = { repository = "tuxzz/ref_thread_local.rs" }
-travis-ci = { repository = "tuxzz/ref_thread_local.rs" }
+appveyor = { repository = "Xeiron/ref_thread_local.rs" }
+travis-ci = { repository = "Xeiron/ref_thread_local.rs" }
 
-is-it-maintained-issue-resolution = { repository = "tuxzz/ref_thread_local.rs" }
-is-it-maintained-open-issues = { repository = "tuxzz/ref_thread_local.rs" }
+is-it-maintained-issue-resolution = { repository = "Xeiron/ref_thread_local.rs" }
+is-it-maintained-open-issues = { repository = "Xeiron/ref_thread_local.rs" }
 
 maintenance = { status = "passively-maintained" }
