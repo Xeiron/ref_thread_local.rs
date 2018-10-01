@@ -1,0 +1,11 @@
+[package]
+name = "ref_thread_local_compiletest"
+version = "0.0.0"
+publish = false
+authors = ["tuxzz <dorazzsoft@gmail.com>"]
+
+[dependencies.ref_thread_local]
+path = "../"
+
+[dependencies.compiletest_rs]
+version = "*"

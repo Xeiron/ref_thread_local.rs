@@ -1,0 +1,23 @@
+[package]
+name = "ref_thread_local"
+version = "0.0.0" # NB: When modifying, also modify html_root_url in lib.rs
+authors = ["Tuku <tuku@tuxzz.org>", "Hikaria <hikaria@tuxzz.org>"]
+
+license = "MIT"
+
+description = "A macro for declaring thread-local `static`s like using both of `lazy_static!` and `RefCell`"
+readme = "README.md"
+documentation = "https://docs.rs/ref_thread_local"
+
+repository = "https://github.com/Xeiron/ref_thread_local.rs"
+keywords = ["macro", "lazy", "thread", "thread_local", "static", "refcell"]
+categories = [ "rust-patterns", "memory-management" ]
+
+[badges]
+appveyor = { repository = "tuxzz/ref_thread_local.rs" }
+travis-ci = { repository = "tuxzz/ref_thread_local.rs" }
+
+is-it-maintained-issue-resolution = { repository = "tuxzz/ref_thread_local.rs" }
+is-it-maintained-open-issues = { repository = "tuxzz/ref_thread_local.rs" }
+
+maintenance = { status = "passively-maintained" }
