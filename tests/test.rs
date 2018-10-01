@@ -51,7 +51,10 @@ fn test_basic() {
     assert_eq!(*NUMBER.borrow(), 6);
     assert!(HASHMAP.borrow().get(&1).is_some());
     assert!(HASHMAP.borrow().get(&3).is_none());
-    assert_eq!(&*ARRAY_BOXES.borrow(), &[Box::new(1), Box::new(2), Box::new(3)]);
+    assert_eq!(
+        &*ARRAY_BOXES.borrow(),
+        &[Box::new(1), Box::new(2), Box::new(3)]
+    );
     assert_eq!(*UNSAFE.borrow(), std::u32::MAX);
 }
 
@@ -85,7 +88,10 @@ fn test_meta() {
     // just to make sure it was copied
     assert!(&STRING as *const _ != &copy_of_string as *const _);
     // this would not compile if STRING were not marked #[derive(Debug)]
-    assert_eq!(format!("{:?}", STRING), "STRING { _private_field: () }".to_string());
+    assert_eq!(
+        format!("{:?}", STRING),
+        "STRING { _private_field: () }".to_string()
+    );
 }
 
 mod visibility {
@@ -128,10 +134,18 @@ struct Once(X);
 const ONCE_INIT: Once = Once(X);
 static DATA: X = X;
 static ONCE: X = X;
-fn require_sync() -> X { X }
-fn transmute() -> X { X }
-fn __static_ref_initialize() -> X { X }
-fn test(_: Vec<X>) -> X { X }
+fn require_sync() -> X {
+    X
+}
+fn transmute() -> X {
+    X
+}
+fn __static_ref_initialize() -> X {
+    X
+}
+fn test(_: Vec<X>) -> X {
+    X
+}
 
 // All these names should not be shadowed
 ref_thread_local! {
@@ -150,8 +164,8 @@ fn item_name_shadowing() {
 }
 
 use std::sync::atomic::AtomicBool;
-use std::sync::atomic::ATOMIC_BOOL_INIT;
 use std::sync::atomic::Ordering::SeqCst;
+use std::sync::atomic::ATOMIC_BOOL_INIT;
 
 static PRE_INIT_FLAG: AtomicBool = ATOMIC_BOOL_INIT;
 

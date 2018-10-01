@@ -1,7 +1,7 @@
 // Copyright 2018 tuxzz and lazy-static.rs Developers
 //
-// Licensed under the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT>, 
-// at your option. This file may not be copied, modified, 
+// Licensed under the MIT license <LICENSE-MIT or http://opensource.org/licenses/MIT>,
+// at your option. This file may not be copied, modified,
 // or distributed except according to those terms.
 
 /*!
@@ -91,13 +91,13 @@ pub mod refmanager;
 pub use self::refmanager::*;
 
 pub trait RefThreadLocal<T> {
-  fn initialize(&self) -> Result<(), ()>;
-  fn destroy(&self) -> Result<(), ()>;
-  fn is_initialized(&self) -> bool;
-  fn borrow<'a>(&self) -> Ref<'a, T>;
-  fn borrow_mut<'a>(&self) -> RefMut<'a, T>;
-  fn try_borrow<'a>(&self) -> Result<Ref<'a, T>, BorrowError>;
-  fn try_borrow_mut<'a>(&self) -> Result<RefMut<'a, T>, BorrowMutError>;
+    fn initialize(&self) -> Result<(), ()>;
+    fn destroy(&self) -> Result<(), ()>;
+    fn is_initialized(&self) -> bool;
+    fn borrow<'a>(&self) -> Ref<'a, T>;
+    fn borrow_mut<'a>(&self) -> RefMut<'a, T>;
+    fn try_borrow<'a>(&self) -> Result<Ref<'a, T>, BorrowError>;
+    fn try_borrow_mut<'a>(&self) -> Result<RefMut<'a, T>, BorrowMutError>;
 }
 
 #[macro_export(local_inner_macros)]
