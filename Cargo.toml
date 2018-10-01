@@ -10,7 +10,7 @@ readme = "README.md"
 documentation = "https://docs.rs/ref_thread_local"
 
 repository = "https://github.com/Xeiron/ref_thread_local.rs"
-keywords = ["macro", "lazy", "thread", "thread_local", "static", "refcell"]
+keywords = ["macro", "lazy", "thread", "thread_local", "static"]
 categories = [ "rust-patterns", "memory-management" ]
 
 [badges]
