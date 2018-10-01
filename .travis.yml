@@ -1,7 +1,6 @@
 language: rust
 matrix:
   include:
-    - rust: 1.30.0
     - os: osx
     - rust: beta
     - rust: nightly
