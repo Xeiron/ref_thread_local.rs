@@ -7,7 +7,7 @@
 /*!
 A macro for declaring thread-local `static`s like using both of `lazy_static!` and `RefCell`
 
-Using this macro, you can have thread-local `static`s be referenced by `borrow()` function 
+Using this macro, you can have thread-local `static`s be referenced by `borrow()` function
 like using a `RefCell`.
 
 You may also initialize or destroy a `static` variable at any time you like.
@@ -43,15 +43,15 @@ For a given `static managed NAME: TYPE = EXPR;`, the macro generates a unique ty
 implements `RefThreadLocal<T>` trait and stores it in a static with name `NAME`. (Attributes end up
 attaching to this type.)
 
-When calling any method of this unique type, it generated a `RefManager<T>` internally, 
+When calling any method of this unique type, it generated a `RefManager<T>` internally,
 which manage the reference count of borrowing, and initialize a internal
-thread-local `static` variable on calling `initialize()`, `borrow()`, `borrow_mut()`, 
+thread-local `static` variable on calling `initialize()`, `borrow()`, `borrow_mut()`,
 `borrow_mut()`, `try_borrow_mut()` only if when uninitialized or destroyed.
 
-Like `RefCell`, `borrow()` and `borrow_mut()` don't return reference but instead 
+Like `RefCell`, `borrow()` and `borrow_mut()` don't return reference but instead
 `Ref<'a, T>` or `RefMut<'a, T>`, which manage a borrow count internally.
 
-Like `thread_local!`, variables in `ref_thread_local!` will be dropped normally 
+Like `thread_local!`, variables in `ref_thread_local!` will be dropped normally
 when thread is exiting or `destroy()` is called.
 
 # Example
