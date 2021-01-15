@@ -17,8 +17,6 @@ You may also initialize or destroy a `static` variable at any time you like.
 
 `1.30.0+`
 
-Test failed on `1.29.1` due to ICE, maybe backport after ICE is solved.
-
 # Getting Started
 
 [ref_thread_local.rs is available on crates.io](https://crates.io/crates/ref_thread_local).

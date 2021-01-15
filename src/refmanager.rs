@@ -39,13 +39,12 @@ pub struct RefManagerDataGuard<T> {
     peek_data: Cell<RefManagerPeekData<T>>,
 }
 
-pub struct Ref<'a, T: 'a> {
+pub struct Ref<'a, T: ?Sized + 'a> {
     borrow_count: &'a Cell<isize>,
     value: &'a T,
 }
 
-#[derive(Debug)]
-pub struct RefMut<'a, T: 'a> {
+pub struct RefMut<'a, T: ?Sized + 'a> {
     borrow_count: &'a Cell<isize>,
     value: &'a mut T,
 }
@@ -167,17 +166,53 @@ impl<T> RefThreadLocal<T> for RefManager<T> {
     }
 }
 
-impl<'a, T> Drop for Ref<'a, T> {
+impl<'a, T: ?Sized> Drop for Ref<'a, T> {
     fn drop(&mut self) {
-        self.borrow_count.set(self.borrow_count.get() - 1);
+        self.borrow_count.set(self.borrow_count.get() - 1); // from positive to zero
     }
 }
 
-impl<'a, T> Deref for Ref<'a, T> {
+impl<'a, T: ?Sized> Deref for Ref<'a, T> {
     type Target = T;
 
     fn deref(&self) -> &T {
         self.value
+    }
+}
+
+impl<'a, T: ?Sized> Ref<'a, T> {
+    pub fn map<U, F>(orig: Ref<'a, T>, f: F) -> Ref<'a, U>
+    where
+        F: FnOnce(&T) -> &U,
+    {
+        let borrow_count = orig.borrow_count;
+        let value = orig.value;
+        std::mem::forget(orig);
+        Ref {
+            borrow_count: borrow_count,
+            value: f(value),
+        }
+    }
+
+    pub fn map_split<U: ?Sized, V: ?Sized, F>(orig: Ref<'a, T>, f: F) -> (Ref<'a, U>, Ref<'a, V>)
+    where
+        F: FnOnce(&T) -> (&U, &V),
+    {
+        let borrow_count = orig.borrow_count;
+        let value = orig.value;
+        std::mem::forget(orig);
+        let (a, b) = f(value);
+        borrow_count.set(borrow_count.get() + 1);
+        (
+            Ref {
+                borrow_count: borrow_count,
+                value: a,
+            },
+            Ref {
+                borrow_count: borrow_count,
+                value: b,
+            },
+        )
     }
 }
 
@@ -193,13 +228,13 @@ impl<'a, T: Display> Display for Ref<'a, T> {
     }
 }
 
-impl<'a, T> Drop for RefMut<'a, T> {
+impl<'a, T: ?Sized> Drop for RefMut<'a, T> {
     fn drop(&mut self) {
-        self.borrow_count.set(0);
+        self.borrow_count.set(self.borrow_count.get() + 1); // from negative to zero
     }
 }
 
-impl<'a, T> Deref for RefMut<'a, T> {
+impl<'a, T: ?Sized> Deref for RefMut<'a, T> {
     type Target = T;
 
     fn deref(&self) -> &T {
@@ -207,9 +242,57 @@ impl<'a, T> Deref for RefMut<'a, T> {
     }
 }
 
-impl<'a, T> DerefMut for RefMut<'a, T> {
+impl<'a, T: ?Sized> DerefMut for RefMut<'a, T> {
     fn deref_mut(&mut self) -> &mut T {
         self.value
+    }
+}
+
+impl<'a, T: Debug> Debug for RefMut<'a, T> {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        Debug::fmt(&**self, f)
+    }
+}
+
+impl<'a, T: Display> Display for RefMut<'a, T> {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        self.value.fmt(f)
+    }
+}
+
+impl<'a, T: ?Sized> RefMut<'a, T> {
+    pub fn map<U, F>(orig: RefMut<'a, T>, f: F) -> RefMut<'a, U>
+    where
+        F: FnOnce(&mut T) -> &mut U,
+    {
+        let borrow_count = orig.borrow_count;
+        let value = orig.value as *mut T;
+        std::mem::forget(orig);
+        RefMut {
+            borrow_count: borrow_count,
+            value: f(unsafe { value.as_mut().unwrap() }),
+        }
+    }
+
+    pub fn map_split<U: ?Sized, V: ?Sized, F>(orig: RefMut<'a, T>, f: F) -> (RefMut<'a, U>, RefMut<'a, V>)
+    where
+        F: FnOnce(&mut T) -> (&mut U, &mut V),
+    {
+        let borrow_count = orig.borrow_count;
+        let value = orig.value as *mut T;
+        std::mem::forget(orig);
+        let (a, b) = f(unsafe { value.as_mut().unwrap() });
+        borrow_count.set(borrow_count.get() - 1);
+        (
+            RefMut {
+                borrow_count: borrow_count,
+                value: a,
+            },
+            RefMut {
+                borrow_count: borrow_count,
+                value: b,
+            },
+        )
     }
 }
 

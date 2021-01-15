@@ -81,7 +81,7 @@ In current version:
 
 */
 
-#![doc(html_root_url = "https://docs.rs/ref_thread_local/0.0.0")]
+#![doc(html_root_url = "https://docs.rs/ref_thread_local/0.1.0")]
 
 #[doc(hidden)]
 pub use std::ops::Deref as __Deref;
@@ -89,6 +89,7 @@ pub use std::ops::Deref as __Deref;
 pub mod refmanager;
 #[doc(hidden)]
 pub use self::refmanager::*;
+pub use self::refmanager::{Ref, RefMut};
 
 pub trait RefThreadLocal<T> {
     fn initialize(&self) -> Result<(), ()>;

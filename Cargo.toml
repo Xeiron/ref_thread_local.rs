@@ -1,6 +1,6 @@
 [package]
 name = "ref_thread_local"
-version = "0.0.0" # NB: When modifying, also modify html_root_url in lib.rs
+version = "0.1.0" # NB: When modifying, also modify html_root_url in lib.rs
 authors = ["Tuku <tuku@tuxzz.org>", "Hikaria <hikaria@tuxzz.org>"]
 
 license = "MIT"

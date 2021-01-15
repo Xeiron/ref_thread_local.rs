@@ -191,3 +191,52 @@ ref_thread_local! {
 fn lifetime_name() {
     let _ = LIFETIME_NAME.borrow();
 }
+
+#[test]
+fn ref_map() {
+    ref_thread_local! {
+        static managed ARR: (u32, u8) = (39, b'b');
+    }
+    let r = ARR.borrow();
+    let s = ref_thread_local::Ref::map(r, |x| &x.0);
+    assert_eq!(*s, 39);
+}
+
+#[test]
+fn ref_map_split() {
+    ref_thread_local! {
+        static managed ARR: Vec<u32> = vec![1, 2, 3, 4, 5, 6, 7, 8];
+    }
+    let r = ARR.borrow();
+    let (a, b) = ref_thread_local::Ref::map_split(r, |x| x.split_at(4));
+    assert_eq!(&*a, &[1, 2, 3, 4]);
+    assert_eq!(&*b, &[5, 6, 7, 8]);
+}
+
+#[test]
+fn refmut_map() {
+    ref_thread_local! {
+        static managed ARR: (u32, u8) = (39, b'b');
+    }
+    {
+        let r = ARR.borrow_mut();
+        let mut s = ref_thread_local::RefMut::map(r, |x| &mut x.0);
+        *s = 42;
+    }
+    let r = ARR.borrow();
+    assert_eq!(*r, (42, b'b'));
+}
+
+#[test]
+fn refmut_map_split() {
+    ref_thread_local! {
+        static managed ARR: Vec<u32> = vec![1, 2, 3, 4, 5, 6, 7, 8];
+    }
+    {
+        let r = ARR.borrow_mut();
+        let (mut a, mut b) = ref_thread_local::RefMut::map_split(r, |x| x.split_at_mut(4));
+        a.iter_mut().for_each(|v| *v += 1);
+        b.iter_mut().for_each(|v| *v *= 2);
+    }
+    assert_eq!(&*ARR.borrow(), &[2, 3, 4, 5, 10, 12, 14, 16]);
+}
