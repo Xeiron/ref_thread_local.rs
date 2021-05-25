@@ -105,27 +105,27 @@ pub trait RefThreadLocal<T> {
 #[doc(hidden)]
 macro_rules! _ref_thread_local_internal {
   ($(#[$attr:meta])* ($($vis:tt)*) static $N:ident : $T:ty = $e:expr; $($t:tt)*) => {
-    _ref_thread_local_internal!(@MAKE TY, $(#[$attr])*, ($($vis)*), $N);
-    _ref_thread_local_internal!(@TAIL, $N : $T = $e);
-    ref_thread_local!($($t)*);
+    $crate::_ref_thread_local_internal!(@MAKE TY, $(#[$attr])*, ($($vis)*), $N);
+    $crate::_ref_thread_local_internal!(@TAIL, $N : $T = $e);
+    $crate::ref_thread_local!($($t)*);
   };
   (@TAIL, $N:ident : $T:ty = $e:expr) => {
     impl $N {
       fn get_refmanager(&self) -> $crate::RefManager<$T> {
         fn init_value() -> $T { $e }
-        _create_refmanager_data!(GUARDED_REF_MANAGER_DATA, $T);
+        $crate::_create_refmanager_data!(GUARDED_REF_MANAGER_DATA, $T);
         $crate::RefManager::new(&GUARDED_REF_MANAGER_DATA, init_value)
       }
     }
 
     impl $crate::RefThreadLocal<$T> for $N {
-      fn initialize(&self) -> Result<(), ()> { self.get_refmanager().initialize() }
-      fn destroy(&self) -> Result<(), ()> { self.get_refmanager().destroy() }
+      fn initialize(&self) -> ::std::result::Result<(), ()> { self.get_refmanager().initialize() }
+      fn destroy(&self) -> ::std::result::Result<(), ()> { self.get_refmanager().destroy() }
       fn is_initialized(&self) -> bool { self.get_refmanager().is_initialized() }
       fn borrow<'_lifetime>(&self) -> $crate::Ref<'_lifetime, $T> { self.get_refmanager().borrow() }
       fn borrow_mut<'_lifetime>(&self) -> $crate::RefMut<'_lifetime, $T> { self.get_refmanager().borrow_mut() }
-      fn try_borrow<'_lifetime>(&self) -> Result<$crate::Ref<'_lifetime, $T>, $crate::BorrowError> { self.get_refmanager().try_borrow() }
-      fn try_borrow_mut<'_lifetime>(&self) -> Result<$crate::RefMut<'_lifetime, $T>, $crate::BorrowMutError> { self.get_refmanager().try_borrow_mut() }
+      fn try_borrow<'_lifetime>(&self) -> ::std::result::Result<$crate::Ref<'_lifetime, $T>, $crate::BorrowError> { self.get_refmanager().try_borrow() }
+      fn try_borrow_mut<'_lifetime>(&self) -> ::std::result::Result<$crate::RefMut<'_lifetime, $T>, $crate::BorrowMutError> { self.get_refmanager().try_borrow_mut() }
     }
   };
   (@MAKE TY, $(#[$attr:meta])*, ($($vis:tt)*), $N:ident) => {
@@ -143,13 +143,13 @@ macro_rules! _ref_thread_local_internal {
 #[macro_export(local_inner_macros)]
 macro_rules! ref_thread_local {
   ($(#[$attr:meta])* static managed $N:ident : $T:ty = $e:expr; $($t:tt)*) => {
-    _ref_thread_local_internal!($(#[$attr])* () static $N : $T = $e; $($t)*);
+    $crate::_ref_thread_local_internal!($(#[$attr])* () static $N : $T = $e; $($t)*);
   };
   ($(#[$attr:meta])* pub static managed $N:ident : $T:ty = $e:expr; $($t:tt)*) => {
-    _ref_thread_local_internal!($(#[$attr])* (pub) static $N : $T = $e; $($t)*);
+    $crate::_ref_thread_local_internal!($(#[$attr])* (pub) static $N : $T = $e; $($t)*);
   };
   ($(#[$attr:meta])* pub ($($vis:tt)+) static managed $N:ident : $T:ty = $e:expr; $($t:tt)*) => {
-    _ref_thread_local_internal!($(#[$attr])* (pub ($($vis)+)) static $N : $T = $e; $($t)*);
+    $crate::_ref_thread_local_internal!($(#[$attr])* (pub ($($vis)+)) static $N : $T = $e; $($t)*);
   };
   () => ()
 }
